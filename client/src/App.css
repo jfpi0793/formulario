@@ -1,6 +1,7 @@
-body {
+html body {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   background-color: rgba(0, 0, 255, 0.623);
   display: flex;
   align-items: center;
@@ -16,7 +17,7 @@ body {
 
 .cuadro {
   width: 30em;
-  height: 25em;
+  height: 30em;
   background-color: rgb(8, 8, 238);
   color: white;
   border-radius: 20px;
@@ -45,6 +46,7 @@ body {
 input {
   border-radius: 10px;
   height: 20px;
+  padding: 10px;
 }
 
 a {
@@ -52,12 +54,27 @@ a {
   color: inherit;
 }
 
+.mostrar {
+  background-color: black;
+  color: wheat;
+  border-radius: 10px;
+  margin-top: 15px;
+  transition: background-color 0.3s, border-color 0.5s, transform 0.3s; 
+}
+
+.mostrar:hover {
+  border: 2px solid #ffd700; 
+}
+
 .cta {
   position: relative;
-  margin: 10px 5px 0 0;
+  margin: 30px 10px 0 10px;
   padding: 19px 22px;
   transition: all 0.2s ease;
+  background: transparent;
+  border: none;
 }
+
 .cta:before {
   content: "";
   position: absolute;
@@ -70,7 +87,9 @@ a {
   height: 56px;
   transition: all 0.3s ease;
 }
+
 .cta span {
+  color: white;
   position: relative;
   font-size: 16px;
   line-height: 18px;
@@ -79,6 +98,7 @@ a {
   text-transform: uppercase;
   vertical-align: middle;
 }
+
 .cta svg {
   position: relative;
   top: 0;
@@ -91,10 +111,12 @@ a {
   transform: translateX(-5px);
   transition: all 0.3s ease;
 }
+
 .cta:hover:before {
   width: 100%;
   background: #fffb00;
 }
+
 .cta:hover svg {
   transform: translateX(0);
 }
@@ -106,8 +128,3 @@ a {
 .cta:active {
   transform: scale(0.96);
 }
-
-
-
-
-

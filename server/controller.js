@@ -1,4 +1,5 @@
 import { pool } from "./db.js";
+import bcrypt from 'bcrypt';
 
 export const get = async (req, res) => {
     try {
@@ -24,20 +25,35 @@ export const get1 = async (req, res) => {
     }
 }
 
+
 export const create = async (req, res) => {
     try {
-        const {usuario, contraseña, confirmar_contraseña} = req.body
-        const [rows] = await pool.query('INSERT INTO formulario (usuario, contraseña, confirmar_contraseña) VALUES (?, ?, ?)', [usuario, contraseña, confirmar_contraseña])
+        const { usuario, contraseña, confirmar_contraseña } = req.body;
+
+        const [existingRows] = await pool.query('SELECT * FROM formulario WHERE usuario = ?', [usuario]);
+
+        if (existingRows.length > 0) {
+        return res.status(409).json({ error: 'El usuario ya está registrado.' });
+        }
+
+    
+        const saltRounds = 10; 
+        const hashedPassword = await bcrypt.hash(contraseña, saltRounds);
+        const hashedConfirmPassword = await bcrypt.hash(confirmar_contraseña, saltRounds);
+
+    
+        const [rows] = await pool.query('INSERT INTO formulario (usuario, contraseña, confirmar_contraseña) VALUES (?, ?, ?)', [usuario, hashedPassword, hashedConfirmPassword]);
+
         res.send({
             id_ingreso: rows.insertId,
             usuario,
-            contraseña,
-            confirmar_contraseña,
-        })
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message }); 
+        res.status(500).json({ error: error.message });
     }
-}
+};
+
+
 
 export const update = async (req, res) => {
     try {
