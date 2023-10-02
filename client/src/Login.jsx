@@ -1,15 +1,25 @@
-import axios from 'axios'
-import './App.css'
+import axios from 'axios';
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Login() {
   const [registroExitoso, setRegistroExitoso] = useState(false);
-  const [usuario, setUsuario] = useState('')
-  const [contraseña, setContraseña] = useState('')
-  const [confirmarContraseña, setConfirmarContraseña] = useState('')
-  const [mostrarContraseña, setMostrarContraseña] = useState(false)
-  const [error, setError] = useState('')
+  const [usuario, setUsuario] = useState('');
+  const [contraseña, setContraseña] = useState('');
+  const [confirmarContraseña, setConfirmarContraseña] = useState('');
+  const [mostrarContraseña, setMostrarContraseña] = useState(false);
+  const [error, setError] = useState('');
+  const [borrarCampos, setBorrarCampos] = useState(false);
+
+  useEffect(() => {
+    if (borrarCampos) {
+      setUsuario('');
+      setContraseña('');
+      setConfirmarContraseña('');
+      setBorrarCampos(false); 
+    }
+  }, [borrarCampos]);
 
   const handleSubmit = async () => {
     if (usuario === '' || contraseña === '' || confirmarContraseña === '') {
@@ -24,7 +34,7 @@ function Login() {
       setError('La contraseña debe tener al menos 6 caracteres.');
       setTimeout(() => {
         setError('');
-      }, 2000); 
+      }, 2000);
       return;
     }
 
@@ -32,7 +42,7 @@ function Login() {
       setError('Las contraseñas no coinciden.');
       setTimeout(() => {
         setError('');
-      }, 2000); 
+      }, 2000);
       return;
     }
     setError('');
@@ -46,7 +56,8 @@ function Login() {
 
       console.log(response.data);
       setRegistroExitoso(true);
-      
+      setBorrarCampos(true); 
+
       setTimeout(() => {
         setRegistroExitoso(false);
       }, 2000);
@@ -60,61 +71,61 @@ function Login() {
         console.error('Error al enviar el formulario:', error);
       }
     }
-  }
+  };
 
   return (
-    <div className='cuadro'>
+    <div className="cuadro">
       <div>
-        <h1 className='titulo'>Formulario de registro</h1>
+        <h1 className="titulo">Formulario de registro</h1>
       </div>
-      <div className='contenido'>
+      <div className="contenido">
         <form>
           <label>Ingresar usuario:</label>
-          <input 
+          <input
             type="name"
             name="username"
+            value={usuario}
             onChange={(e) => setUsuario(e.target.value)}
           />
           <label>Ingresar contraseña:</label>
           <input
             type={mostrarContraseña ? "text" : "password"}
             name="password"
+            value={contraseña}
             onChange={(e) => setContraseña(e.target.value)}
           />
           <label>Confirmar contraseña:</label>
           <input
             type={mostrarContraseña ? "text" : "password"}
             name="confirmPassword"
+            value={confirmarContraseña}
             onChange={(e) => setConfirmarContraseña(e.target.value)}
           />
           <button
             type="button"
-            className='mostrar'
+            className="mostrar"
             onClick={() => setMostrarContraseña(!mostrarContraseña)}
           >
             Mostrar Contraseña
-          </button>            
+          </button>
         </form>
-          <button type='submit' className="cta" onClick={handleSubmit}>
-            <span>Ingresar</span>
-            <svg width="10px" height="10px" viewBox="0 0 13 10">
+        <button type="submit" className="cta" onClick={handleSubmit}>
+          <span>Ingresar</span>
+          <svg width="10px" height="10px" viewBox="0 0 13 10">
             <path d="M1,5 L11,5"></path>
             <polyline points="8 1 12 5 8 9"></polyline>
-            </svg>
-          </button>
-          {error && (
-          <div className="alert alert-danger mt-3">
-            {error}
-          </div>
+          </svg>
+        </button>
+        {error && (
+          <div className="alert alert-danger mt-3">{error}</div>
         )}
-          {registroExitoso && (
-            <div className="alert alert-success mt-3">
-              ¡Registro exitoso!
-            </div>
-          )}
+        {registroExitoso && (
+          <div className="alert alert-success mt-3">¡Registro exitoso!</div>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
 export default Login;
+
